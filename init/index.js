@@ -73,11 +73,71 @@ const initDB = async () => {
     "Charleston": [-79.9311, 32.7765],
     "Tokyo": [139.6917, 35.6895],
     "New Hampshire": [-71.5724, 43.1939],
-    "Maldives": [73.2207, 3.2028]
+    "Maldives": [73.2207, 3.2028],
+    // Indian cities
+    "Jaipur": [75.7873, 26.9124],
+    "jaipur": [75.7873, 26.9124],
+    "Jaipur Rajasthan": [75.7873, 26.9124],
+    "jaipur Rajathan": [75.7873, 26.9124], // User's exact input
+    "jaipur Rajasthan": [75.7873, 26.9124],
+    "jaipur rajasthan": [75.7873, 26.9124], // All lowercase correct spelling
+    "Delhi": [77.2090, 28.6139],
+    "Mumbai": [72.8777, 19.0760],
+    "Bangalore": [77.5946, 12.9716],
+    "Chennai": [80.2707, 13.0827],
+    "Kolkata": [88.3639, 22.5726],
+    "Hyderabad": [78.4867, 17.3850],
+    "Pune": [73.8567, 18.5204],
+    "pune": [73.8567, 18.5204],
+    "Ahmedabad": [72.5714, 23.0225],
+    "Goa": [74.1240, 15.2993],
+    "Agra": [78.0081, 27.1767],
+    "Udaipur": [73.7147, 24.5854],
+    "Rajasthan": [74.2179, 27.0238]
   };
   
-  initData.data = initData.data.map((obj) => ({
+  // Assign categories to ensure all filter icons have listings
+  const categoryAssignments = [
+    ["Trending", "Beachfront"], // Cozy Beachfront Cottage
+    ["Rooms", "Design"], // Modern Loft in Downtown
+    ["Mountains", "Cabins"], // Mountain Retreat
+    ["Iconic Cities", "Luxe"], // Historic Villa in Tuscany
+    ["Amazing Pools", "Tropical"], // Next listing
+    ["Casties", "Countryside"], // Castles
+    ["Farms", "Amazing Views"], // Farms
+    ["Arctic", "Top Of The World"], // Arctic
+    ["Domes", "Earth Homes"], // Domes
+    ["Boats", "Lake"], // Boats
+    ["Camping", "National Parks"], // Campaign
+    ["Trending", "Rooms"], // Additional listings
+    ["Iconic Cities", "Design"],
+    ["Mountains", "Treehouse"],
+    ["Amazing Pools", "Beachfront"],
+    ["Casties", "Luxe"],
+    ["Farms", "Countryside"],
+    ["Arctic", "Cabins"],
+    ["Domes", "Tiny Homes"],
+    ["Boats", "Lakefront"],
+    ["Camping", "Omg"],
+    ["Trending", "Tropical"],
+    ["Rooms", "Amazing Views"],
+    ["Iconic Cities", "National Parks"],
+    ["Mountains", "Top Of The World"],
+    ["Amazing Pools", "Luxe"],
+    ["Casties", "Earth Homes"],
+    ["Farms", "Treehouse"],
+    ["Arctic", "Tiny Homes"],
+    ["Domes", "Omg"],
+    ["Boats", "Beachfront"],
+    ["Camping", "Design"]
+  ];
+
+  initData.data = initData.data.map((obj, index) => ({
     ...obj,
+    category: categoryAssignments[index] || [
+      categoryAll[Math.floor(Math.random() * categoryAll.length)],
+      categoryAll[Math.floor(Math.random() * categoryAll.length)]
+    ],
     geometry: {
       type: "Point",
       coordinates: locationCoordinates[obj.location] || [-118.2437, 34.0522] // Default to LA if location not found

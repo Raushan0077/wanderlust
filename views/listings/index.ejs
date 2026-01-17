@@ -191,6 +191,58 @@ info.style.display ="none";
 }
 });
 
+// Filter functionality
+let filters = document.querySelectorAll('.filter');
+filters.forEach(filter => {
+  filter.addEventListener('click', async () => {
+    let category = filter.querySelector('p').textContent.trim().toLowerCase().replace(/\s+/g, ' ');
+    
+    // Map display text to category IDs used in the database
+    const categoryMap = {
+      'trending': 'Trending',
+      'rooms': 'Rooms', 
+      'iconic cities': 'Iconic Cities',
+      'mountains': 'Mountains',
+      'castles': 'Casties',  // Database has "Casties" not "Castles"
+      'amazing pools': 'Amazing Pools',
+      'campaign': 'Camping',  // Note: UI shows "Campaign" but DB has "Camping"
+      'farms': 'Farms',
+      'arctic': 'Arctic',
+      'domes': 'Domes',
+      'boats': 'Boats'
+    };
+    
+    let categoryId = categoryMap[category];
+    if (categoryId) {
+      try {
+        // Show loading state
+        const listingsContainer = document.querySelector('.row.row-cols-lg-3');
+        listingsContainer.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+        
+        // Fetch filtered listings
+        const response = await fetch(`/listings/filter/${encodeURIComponent(categoryId)}`);
+        const html = await response.text();
+        
+        // Parse the HTML and extract the listings section
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newListingsContainer = doc.querySelector('.row.row-cols-lg-3');
+        
+        if (newListingsContainer) {
+          // Replace the current listings with filtered ones
+          listingsContainer.innerHTML = newListingsContainer.innerHTML;
+        } else {
+          listingsContainer.innerHTML = '<div class="text-center"><p>No listings found for this category.</p></div>';
+        }
+      } catch (error) {
+        console.error('Error filtering listings:', error);
+        const listingsContainer = document.querySelector('.row.row-cols-lg-3');
+        listingsContainer.innerHTML = '<div class="text-center"><p>Error loading listings. Please try again.</p></div>';
+      }
+    }
+  });
+});
+
 
 
 

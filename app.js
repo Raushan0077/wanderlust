@@ -28,6 +28,7 @@ async function main() {
   try {
     await mongoose.connect(dbUrl);
     console.log("connected to DB");
+
   } catch (err) {
     console.log("DB connection failed:", err.message);
   }
@@ -111,6 +112,9 @@ app.use((err , req , res , next) => {
   // res.status(statusCode).send(message);
 });
 
-app.listen(8000, () => {
-  console.log("server is listening to port 8000");
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
+  console.log(`server is listening to port ${PORT}`);
 });
+
+module.exports = app;
